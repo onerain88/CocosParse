@@ -97,16 +97,6 @@ const Parse = {
    * @static
    */
   initialize(applicationId: string, javaScriptKey: string) {
-    if (
-      process.env.PARSE_BUILD === 'browser' &&
-      CoreManager.get('IS_NODE') &&
-      !process.env.SERVER_RENDERING
-    ) {
-      console.log(
-        "It looks like you're using the browser version of the SDK in a " +
-          "node.js environment. You should require('parse/node') instead."
-      );
-    }
     Parse._initialize(applicationId, javaScriptKey);
   },
 
@@ -122,7 +112,8 @@ const Parse = {
     CoreManager.set('MASTER_KEY', masterKey);
     CoreManager.set('USE_MASTER_KEY', false);
     CoreManager.setIfNeeded('EventEmitter', EventEmitter);
-    CoreManager.setIfNeeded('LiveQuery', new ParseLiveQuery());
+    // 关闭 LiveQuery
+    // CoreManager.setIfNeeded('LiveQuery', new ParseLiveQuery());
     CoreManager.setIfNeeded('CryptoController', CryptoController);
     CoreManager.setIfNeeded('EventuallyQueue', EQ);
     CoreManager.setIfNeeded('InstallationController', InstallationController);
@@ -130,12 +121,12 @@ const Parse = {
     CoreManager.setIfNeeded('StorageController', StorageController);
     CoreManager.setIfNeeded('WebSocketController', WebSocketController);
 
-    if (process.env.PARSE_BUILD === 'browser') {
-      Parse.IndexedDB = CoreManager.setIfNeeded(
-        'IndexedDBStorageController',
-        IndexedDBStorageController
-      );
-    }
+    // if (process.env.PARSE_BUILD === 'browser') {
+    //   Parse.IndexedDB = CoreManager.setIfNeeded(
+    //     'IndexedDBStorageController',
+    //     IndexedDBStorageController
+    //   );
+    // }
   },
 
   /**
@@ -405,17 +396,7 @@ const Parse = {
 
 CoreManager.setRESTController(RESTController);
 
-if (process.env.PARSE_BUILD === 'node') {
-  Parse.initialize = Parse._initialize;
-  Parse.Cloud = Parse.Cloud || ({} as any);
-  (Parse.Cloud as any).useMasterKey = function () {
-    CoreManager.set('USE_MASTER_KEY', true);
-  };
-  Parse.Hooks = Hooks;
-}
-
 // For legacy requires, of the form `var Parse = require('parse').Parse`
 Parse.Parse = Parse;
 
-module.exports = Parse;
 export default Parse;

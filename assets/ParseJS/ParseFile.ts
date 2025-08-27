@@ -8,9 +8,6 @@ let XHR: any = null;
 if (typeof XMLHttpRequest !== 'undefined') {
   XHR = XMLHttpRequest;
 }
-if (process.env.PARSE_BUILD === 'weapp') {
-  XHR = XhrWeapp;
-}
 
 interface Base64 {
   base64: string;
@@ -486,26 +483,6 @@ const DefaultController = {
   download: function (uri, options) {
     if (XHR) {
       return this.downloadAjax(uri, options);
-    } else if (process.env.PARSE_BUILD === 'node') {
-      return new Promise((resolve, reject) => {
-        const client = uri.indexOf('https') === 0 ? require('https') : require('http');
-        const req = client.get(uri, resp => {
-          resp.setEncoding('base64');
-          let base64 = '';
-          resp.on('data', data => (base64 += data));
-          resp.on('end', () => {
-            resolve({
-              base64,
-              contentType: resp.headers['content-type'],
-            });
-          });
-        });
-        req.on('abort', () => {
-          resolve({});
-        });
-        req.on('error', reject);
-        options.requestTask(req);
-      });
     } else {
       return Promise.reject('Cannot make a request: No definition of XMLHttpRequest was found.');
     }
@@ -573,4 +550,4 @@ const DefaultController = {
 CoreManager.setFileController(DefaultController);
 
 export default ParseFile;
-exports.b64Digit = b64Digit;
+// exports.b64Digit = b64Digit;

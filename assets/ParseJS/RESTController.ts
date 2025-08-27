@@ -48,12 +48,6 @@ let XHR: any = null;
 if (typeof XMLHttpRequest !== 'undefined') {
   XHR = XMLHttpRequest;
 }
-if (process.env.PARSE_BUILD === 'node') {
-  XHR = require('xmlhttprequest').XMLHttpRequest;
-}
-if (process.env.PARSE_BUILD === 'weapp') {
-  XHR = XhrWeapp;
-}
 
 let useXDomainRequest = false;
 // @ts-ignore
@@ -173,7 +167,7 @@ const RESTController = {
       }
       if (CoreManager.get('IS_NODE')) {
         headers['User-Agent'] =
-          'Parse/' + CoreManager.get('VERSION') + ' (NodeJS ' + process.versions.node + ')';
+          'Parse/' + CoreManager.get('VERSION') + ' (NodeJS 6.1.1)';
       }
       if (isIdempotent) {
         headers['X-Parse-Request-Id'] = requestId;

@@ -3,8 +3,6 @@ import DefaultLocalDatastoreController from './LocalDatastoreController.default'
 
 let LocalDatastoreController: any = DefaultLocalDatastoreController;
 
-if (process.env.PARSE_BUILD === 'react-native') {
-  LocalDatastoreController = RNLocalDatastoreController;
-}
+LocalDatastoreController = RNLocalDatastoreController;
 
 export default LocalDatastoreController;

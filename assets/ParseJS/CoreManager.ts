@@ -330,11 +330,7 @@ interface Config {
 }
 
 const config: Config & Record<string, any> = {
-  IS_NODE:
-    typeof process !== 'undefined' &&
-    !!process.versions &&
-    !!process.versions.node &&
-    !process.versions.electron,
+  IS_NODE: false,
   REQUEST_ATTEMPT_LIMIT: 5,
   REQUEST_BATCH_SIZE: 20,
   REQUEST_HEADERS: {},
@@ -343,7 +339,7 @@ const config: Config & Record<string, any> = {
   SERVER_AUTH_TOKEN: null,
   LIVEQUERY_SERVER_URL: null,
   ENCRYPTED_KEY: null,
-  VERSION: 'js' + require('../package.json').version,
+  VERSION: 'js6.1.1',
   APPLICATION_ID: null,
   JAVASCRIPT_KEY: null,
   MAINTENANCE_KEY: null,

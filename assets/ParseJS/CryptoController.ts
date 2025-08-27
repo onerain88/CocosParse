@@ -1,14 +1,8 @@
 let AES: any;
 let ENC: any;
 
-if (process.env.PARSE_BUILD === 'react-native') {
-  const CryptoJS = require('react-native-crypto-js');
-  AES = CryptoJS.AES;
-  ENC = CryptoJS.enc.Utf8;
-} else {
-  AES = require('crypto-js/aes');
-  ENC = require('crypto-js/enc-utf8');
-}
+// AES = require('crypto-js/aes');
+// ENC = require('crypto-js/enc-utf8');
 
 const CryptoController = {
   encrypt(obj: any, secretKey: string): string {

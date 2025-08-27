@@ -4,30 +4,32 @@ const StorageController = {
   async: 0,
 
   getItem(path: string): string | null {
-    if (Object.hasOwn(memMap, path)) {
-      return memMap[path];
-    }
-    return null;
+    return localStorage.getItem(path);
   },
 
   setItem(path: string, value: string) {
-    memMap[path] = String(value);
+    localStorage.setItem(path, value);
   },
 
   removeItem(path: string) {
-    delete memMap[path];
+    localStorage.removeItem(path);
   },
 
   getAllKeys() {
-    return Object.keys(memMap);
+    // 创建一个数组来存储所有的 key
+    const allKeys = [];
+    // 遍历所有索引，通过 index 获取对应的 key 并存入数组
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i); // 获取第 i 个位置的键名
+        if (key !== null) { // 确保 key 有效
+            allKeys.push(key);
+        }
+    }
+    return allKeys;
   },
 
   clear() {
-    for (const key in memMap) {
-      if (Object.hasOwn(memMap, key)) {
-        delete memMap[key];
-      }
-    }
+    localStorage.clear();
   },
 };
 
