@@ -1,4 +1,4 @@
-import { _decorator, Component, log, Node } from 'cc';
+import { _decorator, Component, log, Node, sys } from 'cc';
 import Parse from '../ParseJS/Parse';
 import ParseUser from '../ParseJS/ParseUser';
 const { ccclass, property } = _decorator;
@@ -10,11 +10,29 @@ export class HelloWorld extends Component {
       Parse.initialize('prs_8d4a9b3c6e1f7a2', 'K8jD5fG2pR9YqW3zX7vB6nH4tM1LbVc');
       Parse.serverURL = "https://sudoku.ihappygame.com/parse";
 
-      const currentUser = await ParseUser.currentAsync();
+      let currentUser = await ParseUser.currentAsync();
       log('当前用户', currentUser);
 
+      let channel;
+      let openId;
+      if (sys.platform === sys.Platform.IOS) {
+        channel = 'iOS';
+        openId = 'iOS-123'
+      } else if (sys.platform === sys.Platform.ANDROID) {
+        channel = 'Android';
+        openId = 'Android-123'
+      } else if (sys.platform === sys.Platform.WECHAT_GAME) {
+        channel = 'wechat';
+        openId = 'wechat-123'
+      } else if (sys.platform === sys.Platform.BYTEDANCE_MINI_GAME) {
+        channel = 'bytedance';
+        openId = 'bytedance-123'
+      } else {
+        channel = 'web';
+        openId = 'web-123'
+      }
       try {
-        await this.loginWithOpenId('web', 'web-234');
+        currentUser = await this.loginWithOpenId(channel, openId);
         log('登录成功', currentUser);
       } catch (err) {
         log('登录失败', err);
